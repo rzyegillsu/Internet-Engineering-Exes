@@ -1,0 +1,65 @@
+body {
+  font-family: sans-serif;
+  background: #f4f4f4;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+.input-box {
+  margin-bottom: 15px;
+}
+
+#taskInput {
+  padding: 8px;
+  width: 200px;
+}
+
+#addBtn {
+  padding: 8px 12px;
+  margin-right: 5px;
+  background: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#addBtn:hover {
+  background: #218838;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  max-width: 300px;
+  margin: auto;
+}
+
+li {
+  background: white;
+  padding: 10px;
+  margin: 5px 0;
+  cursor: pointer;
+  border-radius: 4px;
+  text-align: left;
+  position: relative;
+}
+
+li.done {
+  text-decoration: line-through;
+  color: gray;
+}
+
+.deleteBtn {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: red;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 3px 7px;
+}
