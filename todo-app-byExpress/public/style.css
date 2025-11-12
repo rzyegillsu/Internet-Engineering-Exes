@@ -1,0 +1,16 @@
+:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial}
+body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#f6f8fa;margin:0}
+main{width:420px;background:#fff;padding:20px;border-radius:8px;box-shadow:0 6px 18px rgba(20,30,50,0.08)}
+h1{margin:0 0 12px;font-size:22px}
+.new{display:flex;gap:8px;margin-bottom:12px}
+input{flex:1;padding:8px;border:1px solid #ddd;border-radius:6px}
+button{padding:8px 10px;border:0;background:#0b76ef;color:#fff;border-radius:6px;cursor:pointer}
+.filters{display:flex;gap:6px;margin-bottom:12px}
+.filters button{background:transparent;color:#333;border:1px solid #eee;padding:6px 8px;border-radius:6px}
+.filters button.active{background:#0b76ef;color:#fff;border-color:#0b76ef}
+ul{list-style:none;padding:0;margin:0}
+li{display:flex;align-items:center;gap:8px;padding:8px;border-bottom:1px solid #f0f0f0}
+li .text{flex:1}
+li.done .text{text-decoration:line-through;opacity:0.6}
+li button.toggle{background:transparent;border:0;font-size:16px}
+li button.edit, li button.delete{background:#eee;color:#333;border-radius:6px;padding:6px 8px;border:0}

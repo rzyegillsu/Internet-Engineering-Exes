@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Todo List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main>
+        <h1>My Todos</h1>
+        <div class="new">
+            <input id="newTodo" placeholder="Add task..." maxlength="200" />
+            <button id="addBtn">Add</button>
+        </div>
+
+        <div class="filters">
+            <button data-filter="all" class="active">All</button>
+            <button data-filter="active">Active</button>
+            <button data-filter="done">Done</button>
+        </div>
+
+
+        <ul id="list" aria-live="polite"></ul>
+    </main>
+
+
+    <template id="item-tpl">
+        <li>
+            <button class="toggle" aria-label="toggle">⬜</button>
+            <span class="text"></span>
+            <button class="edit">Edit</button>
+            <button class="delete">Delete</button>
+        </li>
+    </template>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
