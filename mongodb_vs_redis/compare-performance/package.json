@@ -1,0 +1,15 @@
+{
+  "name": "compare-performance",
+  "version": "1.0.0",
+  "description": "Compare Redis and MongoDB for inserting and reading 1000 items",
+  "main": "redis_test.js",
+  "scripts": {
+    "redis": "node redis_test.js",
+    "mongo": "node mongo_test.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "redis": "^4.6.7",
+    "mongodb": "^5.8.0"
+  }
+}
