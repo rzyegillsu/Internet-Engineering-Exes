@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
 const ctrl = require('../controllers/user');
+const validateRequest = require('../middleware/validateRequest');
+const { createUserRules, updateUserRules, idParam } = require('../validators/userValidators');
 
-
-// GET /api/users
 router.get('/', ctrl.list);
-// GET /api/users/:id
-router.get('/:id', ctrl.get);
-// POST /api/users
-router.post('/', ctrl.create);
-// PUT /api/users/:id
-router.put('/:id', ctrl.update);
-// DELETE /api/users/:id
-router.delete('/:id', ctrl.del);
 
+router.get('/:id', idParam, validateRequest, ctrl.get);
+
+router.post('/', createUserRules, validateRequest, ctrl.create);
+
+router.put('/:id', [idParam, ...updateUserRules], validateRequest, ctrl.update);
+
+router.delete('/:id', idParam, validateRequest, ctrl.del);
 
 module.exports = router;

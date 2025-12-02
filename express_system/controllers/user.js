@@ -1,37 +1,38 @@
+const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/user');
 
+exports.list = asyncHandler(async (req, res) => {
+    const profiles = User.listProfiles();
+    return res.formatSuccess({ users: profiles });
+});
 
-exports.list = (req, res) => {
-    res.json(User.all());
-};
+exports.get = asyncHandler(async (req, res) => {
+    const profile = User.getProfile(req.params.id);
+    if (!profile) {
+        return res.formatError({ status: 404, message: 'User not found' });
+    }
+    return res.formatSuccess(profile);
+});
 
+exports.create = asyncHandler(async (req, res) => {
+    const { name, age } = req.body;
+    const profile = User.createProfile({ name, age });
+    return res.formatSuccess(profile, 201);
+});
 
-exports.get = (req, res, next) => {
-    const user = User.find(req.params.id);
-    if (!user) return next({ status: 404, message: 'User not found' });
-    res.json(user);
-};
+exports.update = asyncHandler(async (req, res) => {
+    const { name, age } = req.body;
+    const updated = User.updateProfile(req.params.id, { name, age });
+    if (!updated) {
+        return res.formatError({ status: 404, message: 'User not found' });
+    }
+    return res.formatSuccess(updated);
+});
 
-
-exports.create = (req, res, next) => {
-    const payload = req.body;
-    if (!payload || !payload.firstname || !payload.lastname) {
-        return next({ status: 400, message: 'firstname and lastname are required' });
-}
-    const user = User.create(payload);
-    res.status(201).json(user);
-};
-
-
-exports.update = (req, res, next) => {
-    const user = User.update(req.params.id, req.body);
-    if (!user) return next({ status: 404, message: 'User not found' });
-    res.json(user);
-};
-
-
-exports.del = (req, res, next) => {
-    const ok = User.remove(req.params.id);
-    if (!ok) return next({ status: 404, message: 'User not found' });
-    res.status(204).send();
-};
+exports.del = asyncHandler(async (req, res) => {
+    const deleted = User.deleteProfile(req.params.id);
+    if (!deleted) {
+        return res.formatError({ status: 404, message: 'User not found' });
+    }
+    return res.formatSuccess({ message: 'User removed', id: Number(req.params.id) });
+});

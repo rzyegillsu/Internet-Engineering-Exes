@@ -1,3 +1,10 @@
 - 51.89.194.81 GET / 404 139 - 2.930 ms
 - 51.89.194.81 GET /undefined 404 148 - 0.709 ms
 - 127.0.0.1 POST /api/auth/register 200 124 - 92.813 ms
+- ::ffff:127.0.0.1 GET /health 401 121 - 31.795 ms
+- ::ffff:127.0.0.1 GET /health 200 78 - 3.288 ms
+- ::ffff:127.0.0.1 POST /api/auth/register 200 124 - 413.140 ms
+- ::ffff:127.0.0.1 POST /api/auth/login 200 439 - 293.580 ms
+- ::ffff:127.0.0.1 POST /api/users 400 262 - 22.592 ms
+- ::ffff:127.0.0.1 POST /api/users 201 176 - 3.763 ms
+- ::ffff:127.0.0.1 GET /api/users 200 188 - 1.923 ms

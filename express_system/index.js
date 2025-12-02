@@ -1,69 +1,29 @@
 require('dotenv').config();
-const express = require('express');
-const helmet = require('helmet');
-const cors = require('cors');
-const compression = require('compression');
-const rateLimit = require('express-rate-limit');
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
+const app = require('./app');
 
-const authRoutes = require('./routes/auth');
-const userRoutes = require('./routes/user');
-const formatResponse = require('./middleware/formatResponse');
-const logger = require('./middleware/logger');
-const errorHandler = require('./middleware/errorHandler');
-
-const app = express();
-app.set('trust proxy', 1);
-
-app.use(helmet());
-app.use(compression());
-app.use(express.json());
-app.use(logger);
-
-// CORS
-const allowed = (process.env.ALLOWED_ORIGINS || '').split(',').map(s => s.trim()).filter(Boolean);
-const corsOptions = {
-  origin: function(origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowed.length === 0) return callback(null, true);
-    if (allowed.indexOf(origin) !== -1) return callback(null, true);
-    callback(new Error('CORS not allowed'), false);
-  }
-};
-app.use((req, res, next) => {
-  cors(corsOptions)(req, res, err => {
-    if (err) return next({ status: 403, message: 'CORS Error: origin not allowed' });
-    next();
-  });
-});
-
-// rate limiter
-app.use(rateLimit({
-  windowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 15*60*1000),
-  max: Number(process.env.RATE_LIMIT_MAX || 100),
-  standardHeaders: true,
-  legacyHeaders: false
-}));
-
-// response formatter
-app.use(formatResponse);
-
-// auth routes (public)
-app.use('/api/auth', authRoutes);
-
-// protect following routes with JWT middleware
-const jwtAuth = require('./middleware/auth');
-app.use('/api', jwtAuth);
-
-// protected routes
-app.use('/api/users', userRoutes);
-
-// health
-app.get('/health', (req, res) => res.formatSuccess({ status: 'ok' }));
-
-// error handler
-app.use(errorHandler);
-
+const HOST = process.env.HOST || '0.0.0.0';
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`HTTP Server running on http://localhost:${PORT}`);
+
+app.listen(PORT, HOST, () => {
+  console.log(`HTTP server running on http://${HOST === '0.0.0.0' ? 'localhost' : HOST}:${PORT}`);
 });
+
+if (process.env.HTTPS_ENABLED === 'true') {
+  try {
+    const keyPath = process.env.SSL_KEY_PATH || path.join(__dirname, 'key.pem');
+    const certPath = process.env.SSL_CERT_PATH || path.join(__dirname, 'cert.pem');
+    const credentials = {
+      key: fs.readFileSync(keyPath),
+      cert: fs.readFileSync(certPath)
+    };
+    const HTTPS_PORT = process.env.HTTPS_PORT || 3443;
+    https.createServer(credentials, app).listen(HTTPS_PORT, HOST, () => {
+      console.log(`HTTPS server running on https://localhost:${HTTPS_PORT}`);
+    });
+  } catch (error) {
+    console.warn('Failed to start HTTPS server:', error.message);
+  }
+}
