@@ -1,0 +1,50 @@
+<section class="filters">
+  <form method="GET" action="/">
+    <input
+      type="text"
+      name="search"
+      placeholder="جستجو ..."
+      value="<%= search || "" %>"
+    />
+
+    <select name="status">
+      <option value="" <%= !status ? "selected" : "" %>>همه وضعیت‌ها</option>
+      <option value="pending" <%= status === "pending" ? "selected" : "" %>>در انتظار</option>
+      <option value="done" <%= status === "done" ? "selected" : "" %>>انجام شده</option>
+    </select>
+
+    <button type="submit">فیلتر</button>
+    <a class="link" href="/">حذف فیلتر</a>
+  </form>
+</section>
+
+<section class="add-inline">
+  <form method="POST" action="/add">
+    <input type="text" name="title" placeholder="تسک جدید ..." required />
+    <button type="submit">افزودن</button>
+  </form>
+</section>
+
+<section class="todo-list">
+  <% if (todos && todos.length) { %>
+  <ul>
+    <% todos.forEach(todo => { %>
+    <li>
+      <div>
+        <strong><%= todo.title %></strong>
+        <span class="badge <%= todo.status %>">
+          <%= todo.status === "done" ? "انجام شده" : "در انتظار" %>
+        </span>
+        <time><%= new Date(todo.createdAt).toLocaleString("fa-IR") %></time>
+      </div>
+      <div class="actions">
+        <a href="/edit/<%= todo._id %>">ویرایش</a>
+        <a class="danger" href="/delete/<%= todo._id %>">حذف</a>
+      </div>
+    </li>
+    <% }) %>
+  </ul>
+  <% } else { %>
+  <p>کار یا تسکی برای نمایش وجود ندارد.</p>
+  <% } %>
+</section>
