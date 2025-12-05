@@ -1,0 +1,23 @@
+<section class="card">
+  <% if (todo) { %>
+  <h2>ویرایش تسک</h2>
+  <form method="POST" action="/edit/<%= todo._id %>" class="stack">
+    <label>
+      عنوان
+      <input type="text" name="title" value="<%= todo.title %>" required />
+    </label>
+
+    <label>
+      وضعیت
+      <select name="status">
+        <option value="pending" <%= todo.status === "pending" ? "selected" : "" %>>در انتظار</option>
+        <option value="done" <%= todo.status === "done" ? "selected" : "" %>>انجام شده</option>
+      </select>
+    </label>
+
+    <button type="submit">ذخیره تغییرات</button>
+  </form>
+  <% } else { %>
+  <p>تسک موردنظر پیدا نشد.</p>
+  <% } %>
+</section>
