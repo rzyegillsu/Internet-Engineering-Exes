@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>گزارش پروژه Teacher Assistant Quiz</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap');
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #e0f7fa 0%, #b2dfdb 100%);
+      color: #1f2933;
+      line-height: 1.9;
+    }
+    .wrapper {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+    header {
+      background: #11998e;
+      color: white;
+      padding: 2.5rem;
+      border-radius: 1.2rem;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(18, 89, 77, 0.25);
+    }
+    header h1 { margin: 0; font-size: 2.2rem; }
+    header p { margin: 0.4rem 0 0; opacity: 0.9; }
+    section {
+      margin-top: 2.5rem;
+      background: white;
+      border-radius: 1.1rem;
+      padding: 1.8rem;
+      box-shadow: 0 8px 30px rgba(31, 41, 55, 0.08);
+    }
+    section h2 {
+      margin-top: 0;
+      color: #0d7377;
+      font-size: 1.6rem;
+      border-right: 4px solid #10b981;
+      padding-right: 0.8rem;
+    }
+    ul { padding-right: 1.2rem; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      border: 1px solid #e5e7eb;
+      border-radius: 0.9rem;
+      padding: 1rem 1.2rem;
+      background: #fbfbfb;
+    }
+    .card h3 { margin-top: 0; color: #11998e; }
+    figure {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    figure img {
+      width: 100%;
+      max-width: 960px;
+      border-radius: 1rem;
+      border: 1px solid #d1d5db;
+      box-shadow: 0 10px 35px rgba(15, 23, 42, 0.18);
+    }
+    figure figcaption {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      color: #4b5563;
+    }
+    code {
+      background: #f3f4f6;
+      padding: 0.1rem 0.4rem;
+      border-radius: 0.4rem;
+      font-family: 'Fira Code', monospace;
+    }
+    @media (max-width: 640px) {
+      header { padding: 1.8rem; }
+      header h1 { font-size: 1.8rem; }
+      section { padding: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>گزارش معماری و پیاده‌سازی Teacher Assistant Quiz</h1>
+      <p>پروژه Next.js برای مدیریت آزمون‌های گروهی با داده‌های فایل‌محور</p>
+      <p style="margin-top: 0.6rem; font-size: 0.95rem; opacity: 0.8;">تهیه‌کننده: رضیه کرمی | شماره دانشجویی: 40138823</p>
+    </header>
+
+    <section>
+      <h2>۱. معرفی و اهداف</h2>
+      <p>
+        این پلتفرم برای کلاس‌هایی طراحی شده که در آن معلم بدون نیاز به رابط مدیریت پیچیده، تنها با ویرایش فایل‌های JSON
+        آزمون را کنترل می‌کند و دانشجویان در یک رابط Next.js شرکت می‌کنند. هدف اصلی، یادگیری مفاهیم Full-stack، ساده بودن
+        توسعه و قابلیت ارتقا به سیستم‌های پیشرفته‌تر است.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3>مزایا برای معلم</h3>
+          <ul>
+            <li>کنترل کامل جلسه با ویرایش `session.json`</li>
+            <li>امکان افزودن/حذف پرسش‌ها با ویرایش `questions.json`</li>
+            <li>دسترسی مستقیم به نتایج در `scores.json`</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>مزایا برای دانشجو</h3>
+          <ul>
+            <li>ورود سریع با نام و شرکت در آزمون</li>
+            <li>بازخورد آنی (درست/غلط) برای هر پاسخ</li>
+            <li>مشاهده رتبه‌بندی به‌روزشونده با polling</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>۲. معماری و جریان داده</h2>
+      <p>
+        ساختار پروژه بر پایه Next.js است و از فایل‌های JSON به عنوان دیتابیس استفاده می‌کند. معلم فایل‌ها را ویرایش می‌کند،
+        API های Next.js داده‌ها را می‌خوانند/می‌نویسند و صفحات رابط کاربری از طریق این API ها و polling هر ۲ تا ۳ ثانیه
+        اطلاعات تازه را دریافت می‌کنند.
+      </p>
+      <div class="grid">
+        <div class="card">
+          <h3>لایه داده (data/)</h3>
+          <ul>
+            <li><code>questions.json</code>: لیست پرسش‌ها و گزینه‌ها</li>
+            <li><code>session.json</code>: وضعیت آزمون (باز/بسته و شناسه سؤال فعال)</li>
+            <li><code>scores.json</code>: نمرات دانشجویان (صحیح، کل، زمان آخرین پاسخ)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>لایه API (pages/api)</h3>
+          <ul>
+            <li><code>GET /api/session</code>: وضعیت جلسه</li>
+            <li><code>GET /api/questions</code>: واکشی سؤال‌ها</li>
+            <li><code>POST /api/answers</code>: ثبت پاسخ و محاسبه امتیاز</li>
+            <li><code>GET /api/scores</code>: مرتب‌سازی و ارسال رتبه‌ها</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>رابط کاربری (pages/)</h3>
+          <ul>
+            <li><code>index</code>: معرفی و مسیرهای اصلی</li>
+            <li><code>join</code>: ورود دانشجو و ذخیره نام در LocalStorage</li>
+            <li><code>quiz</code>: نمایش سؤال فعال و ثبت پاسخ</li>
+            <li><code>scoreboard</code>: نمایش رتبه‌بندی با polling</li>
+          </ul>
+        </div>
+      </div>
+      <p>
+        واسط فایل سیستم در مسیر <code>lib/fsdb.js</code> با استفاده از توابع `readJson`/`writeJson` پیاده‌سازی شده و زیرساخت
+        مشترک همه API ها است.
+      </p>
+    </section>
+
+    <section>
+      <h2>۳. روند پیاده‌سازی</h2>
+      <ol>
+        <li>تعریف ساختار پروژه و نصب Next.js، React و React DOM.</li>
+        <li>ایجاد فایل‌های داده نمونه مطابق سناریو آزمون ریاضی/جغرافیا/برنامه‌نویسی.</li>
+        <li>نوشتن کتابخانه فایل‌سیستم (fsdb) برای مدیریت JSON ها.</li>
+        <li>پیاده‌سازی API ها با اعتبارسنجی ورودی و مدیریت وضعیت آزمون.</li>
+        <li>ساخت صفحات فرانت‌اند با React hooks و به‌روزرسانی دوره‌ای.</li>
+        <li>طراحی استایل واحد در `styles/globals.css` با تم سبز و جهت راست به چپ.</li>
+        <li>تهیه مستندات و سناریوهای نقش معلم/دانشجو.</li>
+      </ol>
+      <p>
+        برای Real-time ساده از polling با `setInterval` استفاده شده است تا هر چند ثانیه وضعیت جلسه و جدول امتیازات تازه شوند؛
+        این رویکرد امکان ارتقا به Socket.IO را در آینده فراهم می‌کند.
+      </p>
+    </section>
+
+    <section>
+      <h2>۴. عملکرد رابط کاربری</h2>
+      <figure>
+        <img src="./شروع.png" alt="صفحه شروع" />
+        <figcaption>تصویر ۱ - صفحه معرفی و آغاز مسیر دانشجو</figcaption>
+      </figure>
+      <figure>
+        <img src="./ورود.png" alt="صفحه ورود" />
+        <figcaption>تصویر ۲ - فرم ورود و ذخیره نام دانشجو</figcaption>
+      </figure>
+      <figure>
+        <img src="./آزمون.png" alt="صفحه آزمون" />
+        <figcaption>تصویر ۳ - نمایش سؤال فعال و گزینه‌ها همراه بازخورد آنی</figcaption>
+      </figure>
+      <figure>
+        <img src="./رتبه بندی.png" alt="صفحه رتبه‌بندی" />
+        <figcaption>تصویر ۴ - جدول رتبه‌بندی با به‌روزرسانی خودکار</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>۵. نحوه اجرا و سناریوهای عملیاتی</h2>
+      <div class="grid">
+        <div class="card">
+          <h3>گام‌های معلم</h3>
+          <ol>
+            <li>ویرایش `questions.json` برای افزودن یا حذف سؤال‌ها.</li>
+            <li>به‌روزرسانی `session.json` برای باز کردن آزمون و تعیین سؤال فعال.</li>
+            <li>در پایان کلاس، ذخیره یا پاک‌سازی `scores.json`.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <h3>گام‌های دانشجو</h3>
+          <ol>
+            <li>ورود به `/join` و ثبت نام.</li>
+            <li>شرکت در `/quiz` و پاسخ به سؤال فعال.</li>
+            <li>مشاهده نتایج لحظه‌ای در `/scoreboard`.</li>
+          </ol>
+        </div>
+      </div>
+      <p>
+        اجرای پروژه:
+      </p>
+      <pre style="background:#111827;color:#f3f4f6;padding:1rem;border-radius:0.8rem;direction:ltr;text-align:left;overflow:auto;">
+cd teacher-assistant-quiz
+npm install
+npm run dev
+      </pre>
+      <p>سپس آدرس <code>http://localhost:3000</code> در مرورگر باز می‌شود.</p>
+    </section>
+
+    <section>
+      <h2>۶. جمع‌بندی</h2>
+      <p>
+        Teacher Assistant Quiz نمونه‌ای فشرده از یک پروژه Full-stack است که مفاهیم API Routes، مدیریت فایل، React Hooks و
+        طراحی UI راست‌به‌چپ را پوشش می‌دهد. این پروژه هم برای کلاس‌های واقعی قابل استفاده است و هم به عنوان پایه‌ای برای
+        توسعه سیستم‌های پیچیده‌تر عمل می‌کند.
+      </p>
+      <p style="margin-top:1rem;color:#4b5563;">--آذر ۱۴۰۴--</p>
+    </section>
+  </div>
+</body>
+</html>
